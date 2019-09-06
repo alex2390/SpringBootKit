@@ -192,48 +192,48 @@ public class PanJSONUtil {
 	/**
 	 * main Method
 	 */
-	public static void main(String[] args) {
-		TestModel testModel = new TestModel();
-		testModel.setCreatedTime(new Date());
-		testModel.setName("牛牛");
-		TestModel innerTestModel = new TestModel();
-		innerTestModel.setName("内部 model 名");
-		innerTestModel.setId(1);
-		testModel.setInnerModel(innerTestModel);
-		Map innerMap = new HashMap();
-		innerMap.put("money", 1111);
-		innerMap.put("size", null);
-		innerMap.put("date", new Date());
-		innerMap.put("name", "testInnerMap");
-		testModel.setInnerMap(innerMap);
-		List innerList = new ArrayList();
-		innerMap = new HashMap();
-		innerMap.put("money", 1);
-		innerMap.put("size", null);
-		innerMap.put("date", new Date());
-		innerMap.put("name", "testInnerMap2");
-		innerList.add(innerMap);
-		testModel.setInnerList(innerList);
-//
-//
-//
-////		System.out.println("\n原始数据：\n" + testModel.toString());
+//	public static void main(String[] args) {
+//		TestModel testModel = new TestModel();
+//		testModel.setCreatedTime(new Date());
+//		testModel.setName("牛牛");
+//		TestModel innerTestModel = new TestModel();
+//		innerTestModel.setName("内部 model 名");
+//		innerTestModel.setId(1);
+//		testModel.setInnerModel(innerTestModel);
+//		Map innerMap = new HashMap();
+//		innerMap.put("money", 1111);
+//		innerMap.put("size", null);
+//		innerMap.put("date", new Date());
+//		innerMap.put("name", "testInnerMap");
+//		testModel.setInnerMap(innerMap);
+//		List innerList = new ArrayList();
+//		innerMap = new HashMap();
+//		innerMap.put("money", 1);
+//		innerMap.put("size", null);
+//		innerMap.put("date", new Date());
+//		innerMap.put("name", "testInnerMap2");
+//		innerList.add(innerMap);
+//		testModel.setInnerList(innerList);
 ////
-//		String jsonStr = entityToJson(testModel);
-////		System.out.println("\n实体类转 JSON：\n" + jsonStr);
-////		Map map = entityToMap(testModel);
-////		System.out.println("\n实体类转 Map：\n" + map);
 ////
-////		System.out.println("JSON 转 Map：\n" + jsonToMap(jsonStr));
-////		System.out.println("JSON 转 Entity：\n" + jsonToEntity(jsonStr, TestModel.class));
 ////
-////		System.out.println("\nMap 转 JSON：\n" + mapToJson(map));
-////		System.out.println(mapToEntity(map, TestModel.class));
-//
-		List<TestModel> testModelList = new ArrayList<>();
-		testModelList.add(testModel);
-		String jsonListStr = listToJson(testModelList);
-////		System.out.println(jsonListStr);
-		System.out.println(jsonToList(jsonListStr, TestModel.class));
-	}
+//////		System.out.println("\n原始数据：\n" + testModel.toString());
+//////
+////		String jsonStr = entityToJson(testModel);
+//////		System.out.println("\n实体类转 JSON：\n" + jsonStr);
+//////		Map map = entityToMap(testModel);
+//////		System.out.println("\n实体类转 Map：\n" + map);
+//////
+//////		System.out.println("JSON 转 Map：\n" + jsonToMap(jsonStr));
+//////		System.out.println("JSON 转 Entity：\n" + jsonToEntity(jsonStr, TestModel.class));
+//////
+//////		System.out.println("\nMap 转 JSON：\n" + mapToJson(map));
+//////		System.out.println(mapToEntity(map, TestModel.class));
+////
+//		List<TestModel> testModelList = new ArrayList<>();
+//		testModelList.add(testModel);
+//		String jsonListStr = listToJson(testModelList);
+//////		System.out.println(jsonListStr);
+//		System.out.println(jsonToList(jsonListStr, TestModel.class));
+//	}
 }
