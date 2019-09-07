@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+##    配置数据库
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/db_user?useUnicode=true&characterEncoding=utf8
+#    username: root
+#    password: 123456
+#  jpa:
+#    hibernate:
+#    #    create 自动创建新表
+#    #    create-drop 服务器停止时，会删除表
+#    #    update 更新数据，不会删除数据           - 推荐此写法
+#    #    validate 验证表和实体类是否一致，不一致的话就会报错
+#    #    none 什么也不做
+#      ddl-auto: update
+##      控制台显示 sql 语句
+#      show-sql: true
+
