@@ -21,4 +21,20 @@ public class PanHttpResult<T> {
 	 * 数据
 	 */
 	private String data;
+
+	/**
+	 * 系统错误
+	 *
+	 * @param
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-07 23:20
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult SYSTEM_ERROR() {
+		PanHttpResult panHttpResult = new PanHttpResult();
+		panHttpResult.code = 500;
+		panHttpResult.data = null;
+
+		return panHttpResult;
+	}
 }

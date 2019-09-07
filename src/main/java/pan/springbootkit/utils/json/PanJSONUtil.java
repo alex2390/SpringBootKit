@@ -1,12 +1,16 @@
-package pan.springbootkit.utils;
+package pan.springbootkit.utils.json;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * JSON util
@@ -15,6 +19,7 @@ import java.util.*;
  * Created by panzhangbao on 2019-09-02 08:59:49
  * Copyright © 2019 panzhangbao. All rights reserved.
  */
+@Slf4j
 public class PanJSONUtil {
 
 	/**
@@ -217,23 +222,23 @@ public class PanJSONUtil {
 ////
 ////
 ////
-//////		System.out.println("\n原始数据：\n" + testModel.toString());
+//////		log.info("\n原始数据：\n" + testModel.toString());
 //////
 ////		String jsonStr = entityToJson(testModel);
-//////		System.out.println("\n实体类转 JSON：\n" + jsonStr);
+//////		log.info("\n实体类转 JSON：\n" + jsonStr);
 //////		Map map = entityToMap(testModel);
-//////		System.out.println("\n实体类转 Map：\n" + map);
+//////		log.info("\n实体类转 Map：\n" + map);
 //////
-//////		System.out.println("JSON 转 Map：\n" + jsonToMap(jsonStr));
-//////		System.out.println("JSON 转 Entity：\n" + jsonToEntity(jsonStr, TestModel.class));
+//////		log.info("JSON 转 Map：\n" + jsonToMap(jsonStr));
+//////		log.info("JSON 转 Entity：\n" + jsonToEntity(jsonStr, TestModel.class));
 //////
-//////		System.out.println("\nMap 转 JSON：\n" + mapToJson(map));
-//////		System.out.println(mapToEntity(map, TestModel.class));
+//////		log.info("\nMap 转 JSON：\n" + mapToJson(map));
+//////		log.info(mapToEntity(map, TestModel.class));
 ////
 //		List<TestModel> testModelList = new ArrayList<>();
 //		testModelList.add(testModel);
 //		String jsonListStr = listToJson(testModelList);
-//////		System.out.println(jsonListStr);
-//		System.out.println(jsonToList(jsonListStr, TestModel.class));
+//////		log.info(jsonListStr);
+//		log.info(jsonToList(jsonListStr, TestModel.class).toString());
 //	}
 }

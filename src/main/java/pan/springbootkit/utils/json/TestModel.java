@@ -1,4 +1,4 @@
-package pan.springbootkit.utils;
+package pan.springbootkit.utils.json;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

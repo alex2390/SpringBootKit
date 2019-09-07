@@ -1,6 +1,7 @@
 package pan.springbootkit.utils.http;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -8,7 +9,10 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Http util
@@ -34,309 +38,498 @@ public class PanHttpUtil {
 	private static final String UTF_8 = "UTF-8";
 
 	/**
+	 * 内容类型
+	 */
+	private static final String CONTENT_TYPE = "Content-Type";
+
+	/**
+	 * 内容类型 json
+	 */
+	private static final String  CONTENT_TYPE_APPLICATION_JSON = "application/json";
+
+	private static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
+
+	/**
 	 * doGet
 	 *
-	 * @param httpUrl
+	 * @param httpUrl url
 	 * @return java.lang.String
 	 * @date 2019-09-07 00:54
 	 * @author panzhangbao
 	 */
 	public static PanHttpResult doGet(String httpUrl) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
 		return doGet(httpUrl, null);
 	}
 
 	/**
 	 * doGet
 	 *
-	 * @param httpUrl
+	 * @param httpUrl url
 	 * @param headerMap header 参数
 	 * @return java.lang.String
 	 * @date 2019-09-07 00:53
 	 * @author panzhangbao
 	 */
 	public static PanHttpResult doGet(String httpUrl, Map<String, Object> headerMap) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return defaultInition(httpUrl, RequestMethod.GET.name(), headerMap, null, null);
+	}
+
+	/**
+	 * doPost
+	 *
+	 * @param httpUrl url
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-07 23:21
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPost(String httpUrl) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return doPost(httpUrl, null);
+	}
+
+	/**
+	 * doPost
+	 *
+	 * @param httpUrl url
+	 * @param headerMap header 参数
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:14
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPost(String httpUrl, Map<String, Object> headerMap) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return doPostByJson(httpUrl, headerMap, null);
+	}
+
+	/**
+	 * doPostByJson
+	 *
+	 * @param httpUrl url
+	 * @param paramsJsonString json 请求体
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:15
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPostByJson(String httpUrl, String paramsJsonString) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return doPostByJson(httpUrl, null, paramsJsonString);
+	}
+
+	/**
+	 * doPostByJson
+	 *
+	 * @param httpUrl url
+	 * @param headerMap header 参数
+	 * @param paramsJsonString json 请求体
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:15
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPostByJson(String httpUrl, Map<String, Object> headerMap, String paramsJsonString) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return defaultInition(httpUrl, RequestMethod.POST.name(), headerMap, paramsJsonString, null);
+	}
+
+	/**
+	 * doPostByForm
+	 *
+	 * @param httpUrl url
+	 * @param formParamsMap form 表单请求体
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:16
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPostByForm(String httpUrl, Map<String, Object> formParamsMap) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return doPostByForm(httpUrl, null, formParamsMap);
+	}
+
+	/**
+	 * doPostByForm
+	 *
+	 * @param httpUrl url
+	 * @param headerMap header 参数
+	 * @param formParamsMap form 表单请求体
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:16
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPostByForm(String httpUrl, Map<String, Object> headerMap, Map<String, Object> formParamsMap) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return defaultInition(httpUrl, RequestMethod.POST.name(), headerMap, null, formParamsMap);
+	}
+
+	/**
+	 * doPut
+	 *
+	 * @param httpUrl url
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:17
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPut(String httpUrl) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return doPut(httpUrl, null);
+	}
+
+	/**
+	 * doPut
+	 *
+	 * @param httpUrl url
+	 * @param headerMap header 参数
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:17
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPut(String httpUrl, Map<String, Object> headerMap) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return doPutByJson(httpUrl, headerMap, null);
+	}
+
+	/**
+	 * doPutByJson
+	 *
+	 * @param httpUrl url
+	 * @param paramsJsonString json 请求体
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:17
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPutByJson(String httpUrl, String paramsJsonString) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return doPutByJson(httpUrl, null, paramsJsonString);
+	}
+
+	/**
+	 * doPutByJson
+	 *
+	 * @param httpUrl url
+	 * @param headerMap header 参数
+	 * @param paramsJsonString json 请求体
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:17
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPutByJson(String httpUrl, Map<String, Object> headerMap, String paramsJsonString) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return defaultInition(httpUrl, RequestMethod.PUT.name(), headerMap, paramsJsonString, null);
+	}
+
+	/**
+	 * doPutByForm
+	 *
+	 * @param httpUrl url
+	 * @param formParamsMap form 表单请求体
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:17
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPutByForm(String httpUrl, Map<String, Object> formParamsMap) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return doPutByForm(httpUrl, null, formParamsMap);
+	}
+
+	/**
+	 * doPutByForm
+	 *
+	 * @param httpUrl url
+	 * @param headerMap header 参数
+	 * @param formParamsMap form 表单请求体
+	 * @return pan.springbootkit.utils.http.PanHttpResult
+	 * @date 2019-09-08 00:18
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doPutByForm(String httpUrl, Map<String, Object> headerMap, Map<String, Object> formParamsMap) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return defaultInition(httpUrl, RequestMethod.PUT.name(), headerMap, null, formParamsMap);
+	}
+
+	/**
+	 * doDelete
+	 *
+	 * @param httpUrl url
+	 * @return java.lang.String
+	 * @date 2019-09-08 00:22
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doDelete(String httpUrl) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return doDelete(httpUrl, null);
+	}
+
+	/**
+	 * doDelete
+	 *
+	 * @param httpUrl url
+	 * @param headerMap header 参数
+	 * @return java.lang.String
+	 * @date 2019-09-08 00:22
+	 * @author panzhangbao
+	 */
+	public static PanHttpResult doDelete(String httpUrl, Map<String, Object> headerMap) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
+		return defaultInition(httpUrl, RequestMethod.DELETE.name(), headerMap, null, null);
+	}
+
+	/**
+	 * 默认初始化
+	 *
+	 * @param httpUrl url
+	 * @param requestMethod 请求方法
+	 * @param headerMap header 参数
+	 * @param jsonParamsString json 请求体
+ 	 * @param formParamsMap  form 表单请求体
+	 * @return pan.springbootkit.utils.http.PanHttpResult 返回结果
+	 * @date 2019-09-08 00:03
+	 * @author panzhangbao
+	 */
+	private static PanHttpResult defaultInition(String httpUrl,
+										  String requestMethod,
+										  Map<String, Object> headerMap,
+										  String jsonParamsString,
+										  Map<String, Object> formParamsMap) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (StringUtils.isBlank(httpUrl) || StringUtils.isBlank(requestMethod)) {
+			return PanHttpResult.SYSTEM_ERROR();
+		}
+
 		HttpURLConnection connection = null;
 		InputStream is = null;
+		OutputStream os = null;
 		BufferedReader br = null;
 		PanHttpResult result = new PanHttpResult();
 
 		try {
-			URL url = new URL(httpUrl);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod(RequestMethod.GET.name());
+			connection = (HttpURLConnection) new URL(httpUrl).openConnection();
+			connection.setRequestMethod(requestMethod);
 			connection.setConnectTimeout(CONNECT_TIMEOUT);
 			connection.setReadTimeout(READ_TIMEOUT);
+
+			if (RequestMethod.POST.name().equals(requestMethod) || RequestMethod.PUT.name().equals(requestMethod)) {
+				// 默认值为：false，当向远程服务器传送数据/写数据时，需要设置为true
+				connection.setDoOutput(true);
+			}
+
+			// header 参数
 			if (!CollectionUtils.isEmpty(headerMap)) {
+				headerMap.put(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON);
 				for (Map.Entry<String, Object> entry : headerMap.entrySet()) {
 					connection.setRequestProperty(entry.getKey(), entry.getValue().toString());
 				}
 			}
-			connection.connect();
 
+			if (StringUtils.isNotBlank(jsonParamsString)) {
+				connection.setRequestProperty(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON);
+			}
+			if (!CollectionUtils.isEmpty(formParamsMap)) {
+				connection.setRequestProperty(CONTENT_TYPE, CONTENT_TYPE_FORM);
+			}
+
+			if (RequestMethod.POST.name().equals(requestMethod) || RequestMethod.PUT.name().equals(requestMethod)) {
+				// 通过连接对象获取一个输出流
+				os = connection.getOutputStream();
+				if (StringUtils.isNotBlank(jsonParamsString)) {
+					// 通过输出流对象将参数写出去/传输出去,它是通过字节数组写出的
+					os.write(jsonParamsString.getBytes());
+				}
+
+				if (!CollectionUtils.isEmpty(formParamsMap)) {
+					// 通过输出流对象将参数写出去/传输出去,它是通过字节数组写出的(form表单形式的参数实质也是key,value值的拼接，类似于get请求参数的拼接)
+					os.write(createLinkString(formParamsMap).getBytes());
+				}
+			}
+
+			// 通过连接对象获取一个输入流，向远程读取
 			if (connection.getResponseCode() == 200) {
 				is = connection.getInputStream();
 			}else {
 				is = connection.getErrorStream();
 			}
 
+			// 对输入流对象进行包装:charset根据工作项目组的要求来设置
 			br = new BufferedReader(new InputStreamReader(is, UTF_8));
-			// 存放数据
 			StringBuffer sbf = new StringBuffer();
 			String temp;
+			// 循环遍历一行一行读取数据
 			while ((temp = br.readLine()) != null) {
 				sbf.append(temp);
 				sbf.append("\r\n");
 			}
-			result.setData(sbf.toString());
-
-		} catch (MalformedURLException e) {
-			result.setCode(500);
-			result.setData(e.toString());
-			log.error("\nPanHttpUtil doGet MalformedURLException:\n", e.toString());
-		} catch (IOException e) {
-			result.setCode(500);
-			result.setData(e.toString());
-			log.error("\nPanHttpUtil doGet IOException:\n", e.toString());
-		} finally {
-			if (null != br) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					result.setCode(500);
-					result.setData(e.toString());
-					e.printStackTrace();
-				}
-			}
-			if (null != is) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					result.setCode(500);
-					result.setData(e.toString());
-					e.printStackTrace();
-				}
-			}
-			connection.disconnect();
-		}
-		try {
 			result.setCode(connection.getResponseCode());
+			result.setData(sbf.toString());
+		} catch (MalformedURLException e) {
+			result.setCode(500);
+			result.setData(e.toString());
+			log.error("\nPanHttpUtil " + requestMethod + " MalformedURLException:\n", e.toString());
 		} catch (IOException e) {
 			result.setCode(500);
 			result.setData(e.toString());
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	/**
-	 * 向指定 URL 发送POST方法的请求
-	 *
-	 * @param httpUrl
-	 *            发送请求的 URL
-	 * @param paramJsonString
-	 *            请求参数应该是{"key":"==g43sEvsUcbcunFv3mHkIzlHO4iiUIT R7WwXuSVKTK0yugJnZSlr6qNbxsL8OqCUAFyCDCoRKQ882m6cTTi0q9uCJsq JJvxS+8mZVRP/7lWfEVt8/N9mKplUA68SWJEPSXyz4MDeFam766KEyvqZ99d"}的形式。
-	 * @return 所代表远程资源的响应结果
-	 */
-	public static String doPost(String httpUrl, String paramJsonString) {
-		HttpURLConnection connection = null;
-		InputStream is = null;
-		OutputStream os = null;
-		BufferedReader br = null;
-		String result = null;
-		try {
-			URL url = new URL(httpUrl);
-			// 通过远程url连接对象打开连接
-			connection = (HttpURLConnection) url.openConnection();
-			// 设置连接请求方式
-			connection.setRequestMethod("POST");
-			// 设置连接主机服务器超时时间：15000毫秒
-			connection.setConnectTimeout(15000);
-			// 设置读取主机服务器返回数据超时时间：60000毫秒
-			connection.setReadTimeout(60000);
-			// 默认值为：false，当向远程服务器传送数据/写数据时，需要设置为true
-			connection.setDoOutput(true);
-			// 默认值为：true，当前向远程服务读取数据时，设置为true，该参数可有可无
-			connection.setDoInput(true);
-			// 设置传入参数的格式:请求参数应该是 name1=value1&name2=value2 的形式。
-			connection.setRequestProperty("Content-Type", "application/json");
-			// 设置鉴权信息：Authorization: Bearer da3efcbf-0845-4fe3-8aba-ee040be542c0
-			//connection.setRequestProperty("Authorization", "Bearer da3efcbf-0845-4fe3-8aba-ee040be542c0");
-			// 通过连接对象获取一个输出流
-			os = connection.getOutputStream();
-			// 通过输出流对象将参数写出去/传输出去,它是通过字节数组写出的
-			os.write(paramJsonString.getBytes());
-			// 通过连接对象获取一个输入流，向远程读取
-			if (connection.getResponseCode() == 200) {
-				is = connection.getInputStream();
-				// 对输入流对象进行包装:charset根据工作项目组的要求来设置
-				br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-				StringBuffer sbf = new StringBuffer();
-				String temp = null;
-				// 循环遍历一行一行读取数据
-				while ((temp = br.readLine()) != null) {
-					sbf.append(temp);
-					sbf.append("\r\n");
-				}
-				result = sbf.toString();
-			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("\nPanHttpUtil " + requestMethod + " IOException:\n", e.toString());
 		} finally {
 			// 关闭资源
 			if (null != br) {
 				try {
 					br.close();
 				} catch (IOException e) {
-					e.printStackTrace();
-				}
+					result.setCode(500);
+					result.setData(e.toString());
+					log.error("\nPanHttpUtil " + requestMethod + " IOException:\n", e.toString());				}
 			}
 			if (null != os) {
 				try {
 					os.close();
 				} catch (IOException e) {
-					e.printStackTrace();
-				}
+					result.setCode(500);
+					result.setData(e.toString());
+					log.error("\nPanHttpUtil " + requestMethod + " IOException:\n", e.toString());				}
 			}
 			if (null != is) {
 				try {
 					is.close();
 				} catch (IOException e) {
-					e.printStackTrace();
-				}
+					result.setCode(500);
+					result.setData(e.toString());
+					log.error("\nPanHttpUtil " + requestMethod + " IOException:\n", e.toString());				}
 			}
 			// 断开与远程地址url的连接
 			connection.disconnect();
 		}
+
 		return result;
 	}
 
-	/**
-	 *
-	 * @param httpUrl  请求的url
-	 * @param param  form表单的参数（key,value形式）
-	 * @return
-	 */
-	public static String doPostForm(String httpUrl, Map param) {
-
-		HttpURLConnection connection = null;
-		InputStream is = null;
-		OutputStream os = null;
-		BufferedReader br = null;
-		String result = null;
-		try {
-			URL url = new URL(httpUrl);
-			// 通过远程url连接对象打开连接
-			connection = (HttpURLConnection) url.openConnection();
-			// 设置连接请求方式
-			connection.setRequestMethod("POST");
-			// 设置连接主机服务器超时时间：15000毫秒
-			connection.setConnectTimeout(15000);
-			// 设置读取主机服务器返回数据超时时间：60000毫秒
-			connection.setReadTimeout(60000);
-			// 默认值为：false，当向远程服务器传送数据/写数据时，需要设置为true
-			connection.setDoOutput(true);
-			// 默认值为：true，当前向远程服务读取数据时，设置为true，该参数可有可无
-			connection.setDoInput(true);
-			// 设置传入参数的格式:请求参数应该是 name1=value1&name2=value2 的形式。
-			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			// 设置鉴权信息：Authorization: Bearer da3efcbf-0845-4fe3-8aba-ee040be542c0
-			//connection.setRequestProperty("Authorization", "Bearer da3efcbf-0845-4fe3-8aba-ee040be542c0");
-			// 通过连接对象获取一个输出流
-			os = connection.getOutputStream();
-			// 通过输出流对象将参数写出去/传输出去,它是通过字节数组写出的(form表单形式的参数实质也是key,value值的拼接，类似于get请求参数的拼接)
-			os.write(createLinkString(param).getBytes());
-			// 通过连接对象获取一个输入流，向远程读取
-			if (connection.getResponseCode() == 200) {
-				is = connection.getInputStream();
-				// 对输入流对象进行包装:charset根据工作项目组的要求来设置
-				br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-				StringBuffer sbf = new StringBuffer();
-				String temp = null;
-				// 循环遍历一行一行读取数据
-				while ((temp = br.readLine()) != null) {
-					sbf.append(temp);
-					sbf.append("\r\n");
-				}
-				result = sbf.toString();
-			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			// 关闭资源
-			if (null != br) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if (null != os) {
-				try {
-					os.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if (null != is) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			// 断开与远程地址url的连接
-			connection.disconnect();
-		}
-		return result;
-	}
 	/**
 	 * 把数组所有元素排序，并按照“参数=参数值”的模式用“&”字符拼接成字符串
-	 * @param params 需要排序并参与字符拼接的参数组
-	 * @return 拼接后字符串
+	 *
+	 * @param paramsMap 需要排序并参与字符拼接的参数组
+	 * @return java.lang.String 拼接后字符串
+	 * @date 2019-09-07 23:51
+	 * @author panzhangbao
 	 */
-	public static String createLinkString(Map<String, String> params) {
+	private static String createLinkString(Map<String, Object> paramsMap) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (CollectionUtils.isEmpty(paramsMap)) {
+			return null;
+		}
 
-		List<String> keys = new ArrayList<>(params.keySet());
+		List<String> keys = new ArrayList<>(paramsMap.keySet());
 		Collections.sort(keys);
 
-		StringBuilder prestr = new StringBuilder();
+		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < keys.size(); i++) {
 			String key = keys.get(i);
-			String value = params.get(key);
-			if (i == keys.size() - 1) {// 拼接时，不包括最后一个&字符
-				prestr.append(key).append("=").append(value);
+			String value = String.valueOf(paramsMap.get(key));
+
+			// 拼接时，不包括最后一个&字符
+			if (i == keys.size() - 1) {
+				result.append(key).append("=").append(value);
 			} else {
-				prestr.append(key).append("=").append(value).append("&");
+				result.append(key).append("=").append(value).append("&");
 			}
 		}
 
-		return prestr.toString();
-	}
-
-
-	public static void main(String[] args) {
-		String url = "https://ab.tcsmart.com.cn/api/lock/list";
-		Map headerMap = new HashMap();
-		headerMap.put("token", "ah^i2fo67a2jfiaf67gyfa87af8ag8f*&f");
-		PanHttpResult result = PanHttpUtil.doGet(url, headerMap);
-		System.out.println(result);
-
-//		url = "http://localhost:8082/api/core/login";
-//		JSONObject json = new JSONObject();
-//		json.put("key", "==g43sEvsUcbcunFv3mHkIzlHO4iiUIT R7WwXuSVKTK0yugJnZSlr6qNbxsL8OqCUAFyCDCoRKQ882m6cTTi0q9uCJsq JJvxS+8mZVRP/7lWfEVt8/N9mKplUA68SWJEPSXyz4MDeFam766KEyvqZ99d");
-//		String postResult = PanHttpUtil.doPost(url, json.toJSONString());
-//		System.out.println(postResult);
-//
-//		url = "http://localhost:8082/api/test/testSendForm";
-//		Map<String,String> map = new HashMap<>();
-//		map.put("name", "测试表单请求");
-//		String formResult = PanHttpUtil.doPostForm(url, map);
-//		System.out.println(formResult);
-
+		return result.toString();
 	}
 }
