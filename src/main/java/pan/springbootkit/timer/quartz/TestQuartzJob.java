@@ -11,30 +11,30 @@ import org.quartz.JobExecutionContext;
  * Copyright © 2019 panzhangbao. All rights reserved.
  */
 @Slf4j
-public class WechatTokenQuartzJob implements Job {
+public class TestQuartzJob implements Job {
 
 	/**
 	 * 任务名称
 	 */
-	public static String JOB_NAME = "WechatTokenTask";
+	public static String JOB_NAME = "job.name.test";
 	/**
 	 * 任务组名
 	 */
-	public static String JOB_GROUP_NAME = "wechat";
+	public static String JOB_GROUP_NAME = "job.group.name.test";
 
 	/**
 	 * 动态任务触发器名称
 	 */
-	public static String TRIGGER_NAME = "WechatTokenTask.trigger";
+	public static String TRIGGER_NAME = "trigger.name.test";
 	/**
 	 * 动态任务触发器组名
 	 */
-	public static String TRIGGER_GROUP_NAME = "WechatTokenTask.trigger_group";
+	public static String TRIGGER_GROUP_NAME = "trigger.group.name";
 
 	/**
 	 * 默认定时时间
 	 */
-	public static String TASK_CRON_DEFAULT = "0/10 * * * * ?";
+	public static String TASK_CRON_DEFAULT = "0/1 * * * * ?";
 
 	/**
 	 * 定时任务执行方法

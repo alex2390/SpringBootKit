@@ -1,5 +1,6 @@
 package pan.springbootkit.timer.quartz;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +18,24 @@ public class QuartzController {
 
 	@PostMapping
 	public String insert() {
-		QuartzManager.addJob(WechatTokenQuartzJob.JOB_NAME,
-				WechatTokenQuartzJob.JOB_GROUP_NAME,
-				WechatTokenQuartzJob.TRIGGER_NAME,
-				WechatTokenQuartzJob.TRIGGER_GROUP_NAME,
-				WechatTokenQuartzJob.class,
-				WechatTokenQuartzJob.TASK_CRON_DEFAULT,
+
+		/**
+		 * 校验 Job 是否重复
+		 */
+		String result = QuartzManager.checkJob(TestQuartzJob.JOB_NAME,
+				TestQuartzJob.JOB_GROUP_NAME,
+				TestQuartzJob.TRIGGER_NAME,
+				TestQuartzJob.TRIGGER_GROUP_NAME);
+		if (StringUtils.isNotBlank(result)) {
+			return result;
+		}
+
+		QuartzManager.addJob(TestQuartzJob.JOB_NAME,
+				TestQuartzJob.JOB_GROUP_NAME,
+				TestQuartzJob.TRIGGER_NAME,
+				TestQuartzJob.TRIGGER_GROUP_NAME,
+				TestQuartzJob.class,
+				TestQuartzJob.TASK_CRON_DEFAULT,
 				true);
 
 		return "SUCCESS";
@@ -30,10 +43,21 @@ public class QuartzController {
 
 	@DeleteMapping
 	public String delete() {
-		QuartzManager.removeJob(WechatTokenQuartzJob.JOB_NAME,
-				WechatTokenQuartzJob.JOB_GROUP_NAME,
-				WechatTokenQuartzJob.TRIGGER_NAME,
-				WechatTokenQuartzJob.TRIGGER_GROUP_NAME);
+		/**
+		 * 校验 Job 是否重复
+		 */
+		String result = QuartzManager.checkJob(TestQuartzJob.JOB_NAME,
+				TestQuartzJob.JOB_GROUP_NAME,
+				TestQuartzJob.TRIGGER_NAME,
+				TestQuartzJob.TRIGGER_GROUP_NAME);
+		if (StringUtils.isBlank(result)) {
+			return "暂无此 Job 信息，请进行其他操作！";
+		}
+
+		QuartzManager.removeJob(TestQuartzJob.JOB_NAME,
+				TestQuartzJob.JOB_GROUP_NAME,
+				TestQuartzJob.TRIGGER_NAME,
+				TestQuartzJob.TRIGGER_GROUP_NAME);
 
 		return "SUCCESS";
 	}

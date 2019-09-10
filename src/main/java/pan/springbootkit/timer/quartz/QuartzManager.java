@@ -36,17 +36,17 @@ public class QuartzManager {
 			Scheduler scheduler = schedulerFactory.getScheduler();
 
 			// 任务名，任务组，任务执行类
-			JobDetail jobDetail= JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroupName).build();
+			JobDetail jobDetail= JobBuilder.newJob(jobClass)
+					.withIdentity(jobName, jobGroupName)
+					.storeDurably().build();
 
-			// 触发器
+			// 触发器构建器
 			TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
-			// 触发器名,触发器组
-			triggerBuilder.withIdentity(triggerName, triggerGroupName);
-			triggerBuilder.startNow();
-			// 触发器时间设定
-			triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(cron));
-			// 创建Trigger对象
-			CronTrigger trigger = (CronTrigger) triggerBuilder.build();
+			// 触发器
+			CronTrigger trigger = triggerBuilder.withIdentity(triggerName, triggerGroupName)
+					.startNow()
+					.withSchedule(CronScheduleBuilder.cronSchedule(cron))
+					.build();
 
 			// 调度容器设置JobDetail和Trigger
 			scheduler.scheduleJob(jobDetail, trigger);
@@ -63,6 +63,43 @@ public class QuartzManager {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * 校验 Job
+	 *
+	 * @param jobName
+	 * @param jobGroupName
+	 * @param triggerName
+	 * @param triggerGroupName
+	 * @return java.lang.String
+	 * @date 2019-09-09 14:16
+	 * @author panzhangbao
+	 */
+	public static String checkJob(String jobName,
+								   String jobGroupName,
+								   String triggerName,
+								   String triggerGroupName) {
+		try {
+			Scheduler scheduler = schedulerFactory.getScheduler();
+			/**
+			 * 校验 JobKey
+			 */
+			JobDetail jobDetail = scheduler.getJobDetail(new JobKey(jobName, jobGroupName));
+			if (null != jobDetail) {
+				return "JobKey 已存在，请勿重复添加！";
+			}
+
+			TriggerKey triggerKey = new TriggerKey(triggerName, triggerGroupName);
+			Trigger trigger = scheduler.getTrigger(triggerKey);
+			if (null != trigger) {
+				return "TriggerKey 已存在，请勿重复添加！";
+			}
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	/**
