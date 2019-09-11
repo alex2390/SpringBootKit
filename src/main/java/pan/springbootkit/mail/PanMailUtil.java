@@ -2,17 +2,19 @@ package pan.springbootkit.mail;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
+import pan.springbootkit.utils.PanStringUtil;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import javax.mail.*;
+import javax.mail.internet.*;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -43,61 +45,61 @@ public class PanMailUtil {
 	/**
 	 * 发送邮件
 	 *
-	 * @param toEmail
-	 * @param content
+	 * @param toEmails 多个收件人邮箱，英文逗号隔开
+	 * @param content 邮件内容
 	 * @return java.lang.Boolean
 	 * @date 2019-09-10 18:08
 	 * @author panzhangbao
 	 */
-	public static Boolean send(String toEmail, String content) {
-		return send(toEmail, content, null, null);
+	public static Boolean send(String toEmails, String content) {
+		return send(toEmails, content, null, null);
 	}
 
 	/**
 	 * 发送邮件，带主题
 	 *
-	 * @param toEmail
-	 * @param content
-	 * @param subject
+	 * @param toEmails 多个收件人邮箱，英文逗号隔开
+	 * @param content 邮件内容
+	 * @param subject 主题
 	 * @return java.lang.Boolean
 	 * @date 2019-09-10 18:08
 	 * @author panzhangbao
 	 */
-	public static Boolean sendBySubject(String toEmail, String content, String subject) {
-		return send(toEmail, content, subject, null);
+	public static Boolean sendBySubject(String toEmails, String content, String subject) {
+		return send(toEmails, content, subject, null);
 	}
 
 	/**
 	 * 发送邮件，带附件
 	 *
-	 * @param toEmail
-	 * @param content
-	 * @param appendixUrl
+	 * @param toEmails 多个收件人邮箱，英文逗号隔开
+	 * @param content 邮件内容
+	 * @param appendixFileList 附件文件列表
 	 * @return java.lang.Boolean
 	 * @date 2019-09-10 18:08
 	 * @author panzhangbao
 	 */
-	public static Boolean sendByAppendix(String toEmail, String content, String appendixUrl) {
-		return send(toEmail, content, null, appendixUrl);
+	public static Boolean sendByAppendix(String toEmails, String content, List<File> appendixFileList) {
+		return send(toEmails, content, null, appendixFileList);
 	}
 
 	/**
 	 * 发送邮件
 	 *
-	 * @param toEmail 收件人邮箱
+	 * @param toEmails 多个收件人邮箱
 	 * @param content	邮件内容
 	 * @param subject	主题
-	 * @param appendixUrl 附件地址
+	 * @param appendixFileList 附件文件列表
 	 *
 	 * @return java.lang.Boolean
 	 * @date 2019-09-10 17:11
 	 * @author panzhangbao
 	 */
-	public static Boolean send(String toEmail, String content, String subject, String appendixUrl) {
+	public static Boolean send(String toEmails, String content, String subject, List<File> appendixFileList) {
 		/**
 		 * 参数合法性校验
 		 */
-		if (StringUtils.isBlank(content) || StringUtils.isBlank(toEmail)) {
+		if (StringUtils.isBlank(content) || StringUtils.isBlank(toEmails)) {
 			return false;
 		}
 
@@ -106,7 +108,7 @@ public class PanMailUtil {
 			info.append("\n邮件主题:").append(subject);
 		}
 		info.append("\n邮件内容：").append(content)
-				.append("\n收件人：").append(toEmail);
+				.append("\n收件人：").append(toEmails);
 		log.info(info.toString());
 
 		Properties props = new Properties();
@@ -119,32 +121,46 @@ public class PanMailUtil {
 
 		Message msg = new MimeMessage(session);
 		try {
-			/**
-			 * 邮件基本信息
-			 */
+			// 发件人
 			msg.setFrom(new InternetAddress(FROM_EMAIL));
-			msg.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
-			msg.setText(content);
+			List<String> toEmailsList = PanStringUtil.stringToList(toEmails);
 
-			/**
-			 * 设置邮件主题
-			 */
+			// 多个收件人
+			InternetAddress[] addresses = new InternetAddress[toEmailsList.size()];
+			for (int i = 0; i < addresses.length; i++) {
+				addresses[i] = new InternetAddress(toEmailsList.get(i));
+			}
+			msg.setRecipients(Message.RecipientType.TO, addresses);
+
+			// 内容
+			Multipart multipart = new MimeMultipart();
+			BodyPart contentPart = new MimeBodyPart();
+			contentPart.setContent(content, "text/html;charset=utf-8");
+			multipart.addBodyPart(contentPart);
+
+			// 主题
 			if (StringUtils.isNotBlank(subject)) {
 				msg.setSubject(subject);
 			}
 
-			/**
-			 * 邮件附件
-			 */
-			if (StringUtils.isNotBlank(appendixUrl)) {
-				DataHandler dataHandler = new DataHandler(new FileDataSource(appendixUrl));
-				MimeBodyPart mimeBodyPart = new MimeBodyPart();
-				mimeBodyPart.setDataHandler(dataHandler);
-				mimeBodyPart.setFileName(dataHandler.getName());
-				MimeMultipart mimeMultipart = new MimeMultipart();
-				mimeMultipart.addBodyPart(mimeBodyPart);
-				msg.setContent(mimeMultipart);
+			// 多个附件
+			if(!CollectionUtils.isEmpty(appendixFileList)) {
+				for(File appendix : appendixFileList) {
+					DataSource source = new FileDataSource(appendix);
+
+					BodyPart attachmentPart = new MimeBodyPart();
+					attachmentPart.setDataHandler(new DataHandler(source));
+
+					try {
+						// 避免中文乱码的处理
+						attachmentPart.setFileName(MimeUtility.encodeWord(appendix.getName()));
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					multipart.addBodyPart(attachmentPart);
+				}
 			}
+			msg.setContent(multipart);
 
 			msg.saveChanges();
 
@@ -167,6 +183,11 @@ public class PanMailUtil {
 	 * main Method
 	 */
 	public static void main(String[] args) {
-		send("18256054622@163.com", "小阚，你好", "证书发送", "/Users/panzhangbao/Documents/aa.crt");
+		List<File> fileList = new ArrayList<>();
+		File file = new File("/Users/panzhangbao/Documents/aa.crt");
+		fileList.add(file);
+		file = new File("/Users/panzhangbao/Documents/a.txt");
+		fileList.add(file);
+		send("panzhangbao@126.com,982080636@qq.com", new Date().toString(), "证书发送", fileList);
 	}
 }
