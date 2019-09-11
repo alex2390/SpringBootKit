@@ -3,7 +3,7 @@ package pan.springbootkit.generalmapper.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import pan.springbootkit.generalmapper.base.BaseResult;
+import pan.springbootkit.base.BaseResult;
 import pan.springbootkit.generalmapper.model.User;
 import pan.springbootkit.generalmapper.service.UserService;
 

@@ -8,3 +8,5 @@
 - Redis 工具类封装（Jedis，集群不常用，自行处理）
 - HttpUtil 工具类封装（RESTful API 形式）
 - JSON 工具类封装（FastJSON）
+- String 工具类
+- Date 工具类

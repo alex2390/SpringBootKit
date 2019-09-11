@@ -1,10 +1,9 @@
-package pan.springbootkit.generalmapper.base;
+package pan.springbootkit.base;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
+import pan.springbootkit.generalmapper.base.BaseResultEnum;
 import pan.springbootkit.utils.PanStringUtil;
 import pan.springbootkit.utils.json.PanJSONUtil;
 
