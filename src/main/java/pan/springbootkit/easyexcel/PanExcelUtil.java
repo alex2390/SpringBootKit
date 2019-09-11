@@ -206,7 +206,7 @@ public class PanExcelUtil {
 	 * @author panzhangbao
 	 */
 	private static Boolean deleteLocalFile(String fileName) {
-		StringBuilder filePath = new StringBuilder(System.getProperty("user.dir"))
+		StringBuilder filePath = new StringBuilder(System.getProperty("mapper.dir"))
 				.append("/")
 				.append(fileName)
 				.append(".xlsx");

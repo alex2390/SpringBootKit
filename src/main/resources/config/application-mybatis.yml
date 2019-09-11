@@ -1,0 +1,32 @@
+server:
+  port: 8081
+
+spring:
+  # JDBC 连接
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_user?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# MyBatis
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl                 # 开启控制台 sql 日志
+
+# Mapper
+mapper:
+  mappers: pan.springbootkit.generalmapper.base.BaseMapper
+  identity: MYSQL # 取回主键的方式 MYSQL: SELECT LAST_INSERT_ID()
+  order: AFTER    # 还可设置为 mapper.before = false
+  not-empty: true # insertSelective 和 updateByPrimaryKeySelective 中，是否判断字符串类型 !=''
+  style: camelhumpAndLowercase # 实体和表转换时的默认规则:驼峰转下划线小写形式
+  enableMethodAnnotation: true # 是否支持（getter 和 setter）在方法上使用注解，默认false
+  enumAsSimpleType: true # 枚举类型当成基本类型对待
+
+# PageHelper
+pagehelper:
+  helper-dialect: mysql
+  reasonable: false
+  support-methods-arguments: true
+  params: count=countSql
