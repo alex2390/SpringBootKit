@@ -5,6 +5,8 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +20,7 @@ import java.util.List;
  * Copyright © 2019 panzhangbao. All rights reserved.
  */
 public class PanExcelUtil {
+
     /**
      * 读取 Excel(多个 sheet)
      *
@@ -69,6 +72,7 @@ public class PanExcelUtil {
             return null;
         }
         reader.read(new Sheet(sheetNo, headLineNum, rowModel.getClass()));
+
         return excelListener.getDatas();
     }
 
@@ -79,16 +83,34 @@ public class PanExcelUtil {
      * @param list      数据 list，每个元素为一个 BaseRowModel
      * @param fileName  导出的文件名
      * @param sheetName 导入文件的 sheet 名
-     * @param object    映射实体类，Excel 模型
      */
-    public static void writeExcel(HttpServletResponse response, List<? extends BaseRowModel> list,
-								  String fileName, String sheetName, BaseRowModel object) {
+    public static void writeExcel(HttpServletResponse response,
+								  List<? extends BaseRowModel> list,
+								  String fileName,
+								  String sheetName) {
+    	/**
+    	 * 参数合法性校验
+    	 */
+    	if (CollectionUtils.isEmpty(list)) {
+    		return;
+		}
+
+    	// sheet
+    	Sheet sheet = new Sheet(1, 0, list.get(0).getClass());
+		if (StringUtils.isNotBlank(sheetName)) {
+			sheet.setSheetName(sheetName);
+		}
+
+
         ExcelWriter writer = new ExcelWriter(getOutputStream(fileName, response), ExcelTypeEnum.XLSX);
-        Sheet sheet = new Sheet(1, 0, object.getClass());
-        sheet.setSheetName(sheetName);
         writer.write(list, sheet);
         writer.finish();
-    }
+
+        /**
+         * 删除本地文件
+         */
+		deleteLocalFile(fileName);
+	}
 
     /**
      * 导出 Excel ：多个 sheet，带表头
@@ -97,14 +119,32 @@ public class PanExcelUtil {
      * @param list      数据 list，每个元素为一个 BaseRowModel
      * @param fileName  导出的文件名
      * @param sheetName 导入文件的 sheet 名
-     * @param object    映射实体类，Excel 模型
      */
-    public static ExcelWriterFactroy writeExcelWithSheets(HttpServletResponse response, List<? extends BaseRowModel> list,
-														  String fileName, String sheetName, BaseRowModel object) {
+    public static ExcelWriterFactroy writeExcelWithSheets(HttpServletResponse response,
+														  List<? extends BaseRowModel> list,
+														  String fileName,
+														  String sheetName) {
+		/**
+		 * 参数合法性校验
+		 */
+		if (CollectionUtils.isEmpty(list)) {
+			return null;
+		}
+
+		// sheet
+		Sheet sheet = new Sheet(1, 0, list.get(0).getClass());
+		if (StringUtils.isNotBlank(sheetName)) {
+			sheet.setSheetName(sheetName);
+		}
+
         ExcelWriterFactroy writer = new ExcelWriterFactroy(getOutputStream(fileName, response), ExcelTypeEnum.XLSX);
-        Sheet sheet = new Sheet(1, 0, object.getClass());
-        sheet.setSheetName(sheetName);
         writer.write(list, sheet);
+
+		/**
+		 * 删除本地文件
+		 */
+		deleteLocalFile(fileName);
+
         return writer;
     }
 
@@ -112,7 +152,7 @@ public class PanExcelUtil {
      * 导出文件时为Writer生成OutputStream
      */
     private static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
-        //创建本地文件
+        // 创建本地文件
         String filePath = fileName + ".xlsx";
         File dbfFile = new File(filePath);
         try {
@@ -121,6 +161,7 @@ public class PanExcelUtil {
             }
             fileName = new String(filePath.getBytes(), "ISO-8859-1");
             response.addHeader("Content-Disposition", "filename=" + fileName);
+			response.setCharacterEncoding("UTF-8");
             return response.getOutputStream();
         } catch (IOException e) {
             throw new ExcelException("创建文件失败！");
@@ -134,17 +175,47 @@ public class PanExcelUtil {
      * @param excelListener new ExcelListener()
      */
     private static ExcelReader getReader(MultipartFile excel, ExcelListener excelListener) {
+    	/**
+    	 * 参数合法性校验
+    	 */
+    	if (null == excel || null == excelListener) {
+    		return null;
+		}
+
         String filename = excel.getOriginalFilename();
         if (filename == null || (!filename.toLowerCase().endsWith(".xls") && !filename.toLowerCase().endsWith(".xlsx"))) {
             throw new ExcelException("文件格式错误！");
         }
-        InputStream inputStream;
         try {
-            inputStream = new BufferedInputStream(excel.getInputStream());
+			InputStream inputStream = new BufferedInputStream(excel.getInputStream());
+
             return new ExcelReader(inputStream, null, excelListener, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return null;
     }
+
+	/**
+	 * 删除本地根目录下文件
+	 *
+	 * @param fileName
+	 * @return java.lang.Boolean
+	 * @date 2019-09-11 14:50
+	 * @author panzhangbao
+	 */
+	private static Boolean deleteLocalFile(String fileName) {
+		StringBuilder filePath = new StringBuilder(System.getProperty("user.dir"))
+				.append("/")
+				.append(fileName)
+				.append(".xlsx");
+
+		File file = new File(filePath.toString());
+		if (file.exists()) {
+			return file.delete();
+		}
+
+		return false;
+	}
 }

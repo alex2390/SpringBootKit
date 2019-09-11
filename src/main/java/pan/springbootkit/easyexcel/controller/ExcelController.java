@@ -19,47 +19,47 @@ import java.util.List;
 @RestController
 @RequestMapping("api/excel")
 public class ExcelController {
+
+	/**
+	 * 读取 Excel（指定某个 sheet）
+	 */
+	@PostMapping("read")
+	public Object read(MultipartFile excel, int sheetNo, @RequestParam(defaultValue = "1") int headLineNum) {
+		return PanExcelUtil.readExcel(excel, new ImportInfo(), sheetNo, headLineNum);
+	}
+
     /**
      * 读取 Excel（允许多个 sheet）
      */
-	@PostMapping("readExcelWithSheets")
-    public Object readExcelWithSheets(MultipartFile excel) {
+	@PostMapping("readWithSheets")
+    public Object readWithSheets(MultipartFile excel) {
         return PanExcelUtil.readExcel(excel, new ImportInfo());
-    }
-
-    /**
-     * 读取 Excel（指定某个 sheet）
-     */
-	@PostMapping("readExcel")
-    public Object readExcel(MultipartFile excel, int sheetNo,
-							@RequestParam(defaultValue = "1") int headLineNum) {
-        return PanExcelUtil.readExcel(excel, new ImportInfo(), sheetNo, headLineNum);
     }
 
     /**
      * 导出 Excel（一个 sheet）
      */
-	@GetMapping("writeExcel")
-    public void writeExcel(HttpServletResponse response){
+	@GetMapping("write")
+    public void write(HttpServletResponse response){
         List<ExportInfo> list = getList();
         String fileName = "一个 Excel 文件";
-        String sheetName = "第一个 sheet";
+        String sheetName = "2019.9.11";
 
-        PanExcelUtil.writeExcel(response, list, fileName, sheetName, new ExportInfo());
+        PanExcelUtil.writeExcel(response, list, fileName, sheetName);
     }
 
     /**
      * 导出 Excel（多个 sheet）
      */
-	@GetMapping("writeExcelWithSheets")
-    public void writeExcelWithSheets(HttpServletResponse response){
+	@GetMapping("writeWithSheets")
+    public void writeWithSheets(HttpServletResponse response){
         List<ExportInfo> list = getList();
-        String fileName = "一个 Excel 文件";
-        String sheetName1 = "第一个 sheet";
-        String sheetName2 = "第二个 sheet";
-        String sheetName3 = "第三个 sheet";
+        String fileName = "多个 Excel 文件";
+        String sheetName1 = "2019.9.13";
+        String sheetName2 = "2019.9.12";
+        String sheetName3 = "2019.9.11";
 
-        PanExcelUtil.writeExcelWithSheets(response, list, fileName, sheetName1, new ExportInfo())
+        PanExcelUtil.writeExcelWithSheets(response, list, fileName, sheetName1)
                 .write(list, sheetName2, new ExportInfo())
                 .write(list, sheetName3, new ExportInfo())
                 .finish();
@@ -79,6 +79,7 @@ public class ExcelController {
         model2.setAddress("198752233");
         model2.setEmail("198752233@gmail.com");
         list.add(model2);
+
         return list;
     }
 }
