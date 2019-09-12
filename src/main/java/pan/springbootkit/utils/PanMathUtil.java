@@ -11,6 +11,43 @@ import org.apache.commons.lang3.StringUtils;
 public class PanMathUtil {
 
 	/**
+	 * 地球半径（单位：m）
+	 */
+	private static Double EARTH_RADIUS = 6378137.0;
+
+	private static Double rad(double d) {
+		return d * Math.PI / 180.0;
+	}
+
+	/**
+	 *  计算两个经纬度之间的距离
+	 *
+	 * @param longitude1 经度1
+	 * @param latitude1 纬度1
+	 * @param longitude2 经度2
+	 * @param latitude2 纬度2
+	 * @return  单位：米
+	 */
+	public static Double getDistance(Double longitude1,Double latitude1, Double longitude2, Double latitude2){
+		/**
+		 * 参数合法性校验
+		 */
+		if (null == longitude1 || null == latitude1 || null == longitude2 || null == latitude2) {
+			return null;
+		}
+
+		Double a = rad(latitude1) - rad(latitude2);
+		Double b = rad(longitude1) - rad(longitude2);
+
+		Double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+				+ Math.cos(rad(latitude1)) * Math.cos(rad(latitude2)) * Math.pow(Math.sin(b / 2), 2)));
+
+		s = Double.valueOf(Math.round(s * EARTH_RADIUS));
+
+		return s;
+	}
+
+	/**
 	 * 十进制转十六进制
 	 *
 	 * @param n	具体的十进制数

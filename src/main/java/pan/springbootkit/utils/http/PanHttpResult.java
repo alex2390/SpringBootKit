@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class PanHttpResult<T> {
+ class PanHttpResult<T> {
 	/**
 	 * 状态码
 	 */
