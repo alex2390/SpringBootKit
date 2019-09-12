@@ -1,4 +1,4 @@
-package pan.springbootkit.utils.algorithm;
+package pan.springbootkit.utils.algorithm.encryptdecrypt;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -16,7 +16,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 /**
- * 算法 util
+ * 加密解密 RSA util
  *
  * Created by panzhangbao on 2019-09-12 13:52:05
  * Copyright © 2019 panzhangbao. All rights reserved.

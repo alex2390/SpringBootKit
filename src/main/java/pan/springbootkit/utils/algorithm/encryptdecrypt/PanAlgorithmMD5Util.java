@@ -1,10 +1,12 @@
-package pan.springbootkit.utils.algorithm;
+package pan.springbootkit.utils.algorithm.encryptdecrypt;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.security.MessageDigest;
 
 /**
+ * 加密解密 MD5 util
+ *
  * Created by panzhangbao on 2019-09-12 14:02:02
  * Copyright © 2019 panzhangbao. All rights reserved.
  */
