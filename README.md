@@ -1,5 +1,6 @@
 # Spring Boot 工具类
 
+- 存储服务器本地文件上传、下载
 - 加密、解密算法：MD5,RSA
 - 集成并封装通用 Mapper
 - EasyExcel（导入、导出）
