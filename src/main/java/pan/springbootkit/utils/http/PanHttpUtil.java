@@ -4,15 +4,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Http util
@@ -48,6 +49,125 @@ public class PanHttpUtil {
 	private static final String  CONTENT_TYPE_APPLICATION_JSON = "application/json";
 
 	private static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
+
+	/**
+	 * getRequest
+	 *
+	 * @param
+	 * @return javax.servlet.http.HttpServletRequest
+	 * @date 2019-09-12 12:12
+	 * @author panzhangbao
+	 */
+	public static HttpServletRequest getRequest() {
+		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		HttpServletRequest request = attributes.getRequest();
+
+		return request;
+	}
+
+	/**
+	 * getResponse
+	 *
+	 * @param
+	 * @return javax.servlet.http.HttpServletResponse
+	 * @date 2019-09-12 12:12
+	 * @author panzhangbao
+	 */
+	public static HttpServletResponse getResponse() {
+		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		HttpServletResponse response = attributes.getResponse();
+
+		return response;
+	}
+
+	/**
+	 * 获取 Header 信息
+	 *
+	 * @param request
+	 * @return java.util.Map<java.lang.String,java.lang.String>
+	 * @date 2019-09-12 11:05
+	 * @author panzhangbao
+	 */
+	public static Map<String, String> getHeadersInfo(HttpServletRequest request) {
+		Map<String, String> map = new HashMap<String, String>();
+		Enumeration headerNames = request.getHeaderNames();
+		while (headerNames.hasMoreElements()) {
+			String key = (String) headerNames.nextElement();
+			String value = request.getHeader(key);
+			map.put(key, value);
+		}
+
+		return map;
+	}
+
+	/**
+	 * 获取所有请求参数
+	 *
+	 * @param request
+	 * @return java.util.Map<java.lang.String,java.lang.String>
+	 * @date 2019-09-12 11:12
+	 * @author panzhangbao
+	 */
+	public static Map<String, String> getAllRequestParam(HttpServletRequest request) {
+		 Map<String, String> res = new HashMap<String, String>();
+    	Enumeration<?> temp = request.getParameterNames();
+    	if (null == temp) {
+    		return null;
+		}
+
+		while (temp.hasMoreElements()) {
+	 		String k = (String) temp.nextElement();
+			String v = request.getParameter(k);
+			if (StringUtils.isBlank(v)) {
+				continue;
+			}
+			res.put(k, v);
+		  }
+
+		return res;
+  }
+
+	/**
+	 * 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址
+	 *
+	 * @param request
+	 * @return java.lang.String
+	 * @date 2019-09-12 10:51
+	 * @author panzhangbao
+	 */
+	public final static String getIpAddress(HttpServletRequest request) {
+		// 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址
+
+		String ip = request.getHeader("X-Forwarded-For");
+
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+				ip = request.getHeader("Proxy-Client-IP");
+			}
+			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+				ip = request.getHeader("WL-Proxy-Client-IP");
+			}
+			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+				ip = request.getHeader("HTTP_CLIENT_IP");
+			}
+			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+				ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+			}
+			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+				ip = request.getRemoteAddr();
+			}
+		} else if (ip.length() > 15) {
+			String[] ips = ip.split(",");
+			for (int index = 0; index < ips.length; index++) {
+				String strIp = (String) ips[index];
+				if (!("unknown".equalsIgnoreCase(strIp))) {
+					ip = strIp;
+					break;
+				}
+			}
+		}
+		return ip;
+	}
 
 	/**
 	 * doGet

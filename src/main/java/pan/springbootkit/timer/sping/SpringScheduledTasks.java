@@ -50,7 +50,7 @@ public class SpringScheduledTasks {
      */
     @Scheduled(fixedRate = 1000 * 30)
     public void reportCurrentTime(){
-//        System.out.println ("每30秒执行一次：" +new SimpleDateFormat ("HH:mm:ss").format (new Date()));
+//        log.info ("每30秒执行一次：" +new SimpleDateFormat ("HH:mm:ss").format (new Date()));
     }
 
     /**
@@ -58,7 +58,7 @@ public class SpringScheduledTasks {
      */
     @Scheduled(cron = "0/1 * * * * * ")
     public void reportCurrentByCron(){
-//        System.out.println ("每秒执行一次：" + new SimpleDateFormat ("HH:mm:ss").format (new Date ()));
+//        log.info ("每秒执行一次：" + new SimpleDateFormat ("HH:mm:ss").format (new Date ()));
     }
 
 }
