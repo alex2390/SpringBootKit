@@ -1,6 +1,6 @@
 package pan.springbootkit.utils.designpattern.设计模式.结构型.桥接模式.AreaB;
 
-import pan.设计模式.结构型.桥接模式.Bridge;
+import pan.springbootkit.utils.designpattern.设计模式.结构型.桥接模式.Bridge;
 
 /**
  * Created by panzhangbao on 2017/9/18.

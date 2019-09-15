@@ -1,6 +1,6 @@
 package pan.springbootkit.utils.designpattern.设计模式.结构型.装饰者模式.Decorator;
 
-import pan.设计模式.结构型.装饰者模式.Component.Component;
+import pan.springbootkit.utils.designpattern.设计模式.结构型.装饰者模式.Component.Component;
 
 /**
  * Created by panzhangbao on 2017/9/18.

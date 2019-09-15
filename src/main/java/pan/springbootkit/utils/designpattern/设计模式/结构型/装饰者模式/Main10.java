@@ -13,9 +13,9 @@ package pan.springbootkit.utils.designpattern.设计模式.结构型.装饰者�
  装饰模式可以在不使用创造更多子类的情况下，将对象的功能加以扩展。
  */
 
-import pan.设计模式.结构型.装饰者模式.Component.ConcreteComponent;
-import pan.设计模式.结构型.装饰者模式.Decorator.ConcreteDecoratorA;
-import pan.设计模式.结构型.装饰者模式.Decorator.Decorator;
+import pan.springbootkit.utils.designpattern.设计模式.结构型.装饰者模式.Component.ConcreteComponent;
+import pan.springbootkit.utils.designpattern.设计模式.结构型.装饰者模式.Decorator.ConcreteDecoratorA;
+import pan.springbootkit.utils.designpattern.设计模式.结构型.装饰者模式.Decorator.Decorator;
 
 /** 在装饰模式中的角色有：
 

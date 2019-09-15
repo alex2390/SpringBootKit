@@ -1,7 +1,7 @@
 package pan.springbootkit.utils.designpattern.设计模式.结构型.享元模式.复合享元模式;
 
-import pan.设计模式.结构型.享元模式.单纯享元模式.Flyweight;
-import pan.设计模式.结构型.享元模式.单纯享元模式.FlyweightFactory;
+import pan.springbootkit.utils.designpattern.设计模式.结构型.享元模式.单纯享元模式.Flyweight;
+import pan.springbootkit.utils.designpattern.设计模式.结构型.享元模式.单纯享元模式.FlyweightFactory;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,8 @@
 package pan.springbootkit.utils.designpattern.设计模式.结构型.外观模式;
 
-import pan.设计模式.结构型.外观模式.Module.ModuleA;
-import pan.设计模式.结构型.外观模式.Module.ModuleB;
-import pan.设计模式.结构型.外观模式.Module.ModuleC;
+import pan.springbootkit.utils.designpattern.设计模式.结构型.外观模式.Module.ModuleA;
+import pan.springbootkit.utils.designpattern.设计模式.结构型.外观模式.Module.ModuleB;
+import pan.springbootkit.utils.designpattern.设计模式.结构型.外观模式.Module.ModuleC;
 
 /**
  * Created by panzhangbao on 2017/9/18.
