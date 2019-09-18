@@ -28,16 +28,28 @@ public class SpringBootKitApplicationTests {
 	 *
 	 * @param
 	 * @return void
-	 * @date 2019-09-16 00:04
+	 * @date 2019-09-16 08:26
 	 * @author panzhangbao
 	 */
 	@Test
 	public void listUser() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get(TestConstant.BASE_URL + "api/db/db_user/user/list")
+		/**
+		 * 打印请求参数
+		 */
+
+		/**
+		 * 调接口
+		 */
+		String baseResult = mockMvc.perform(MockMvcRequestBuilders.get(TestConstant.BASE_URL + "api/db/db_user/user/list")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andDo(MockMvcResultHandlers.print())
-				.andReturn();
+				.andReturn().getResponse().getContentAsString();
+
+		/**
+		 * 打印返回数据
+		 */
+		System.out.println("查询用户列表：\n" + baseResult);
 	}
 
 	@Test
