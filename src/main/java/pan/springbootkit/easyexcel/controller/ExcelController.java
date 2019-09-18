@@ -6,7 +6,6 @@ import pan.springbootkit.easyexcel.PanExcelUtil;
 import pan.springbootkit.easyexcel.model.ExportInfo;
 import pan.springbootkit.easyexcel.model.ImportInfo;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,26 +39,26 @@ public class ExcelController {
      * 导出 Excel（一个 sheet）
      */
 	@GetMapping("write")
-    public void write(HttpServletResponse response){
+    public void write(){
         List<ExportInfo> list = getList();
-        String fileName = "一个 Excel 文件";
+        String fileName = "天诚公租房" + "2019-09-11";
         String sheetName = "2019.9.11";
 
-        PanExcelUtil.writeExcel(response, list, fileName, sheetName);
+        PanExcelUtil.writeExcel(list, fileName, sheetName);
     }
 
     /**
      * 导出 Excel（多个 sheet）
      */
 	@GetMapping("writeWithSheets")
-    public void writeWithSheets(HttpServletResponse response){
+    public void writeWithSheets(){
         List<ExportInfo> list = getList();
         String fileName = "多个 Excel 文件";
         String sheetName1 = "2019.9.13";
         String sheetName2 = "2019.9.12";
         String sheetName3 = "2019.9.11";
 
-        PanExcelUtil.writeExcelWithSheets(response, list, fileName, sheetName1)
+        PanExcelUtil.writeExcelWithSheets(list, fileName, sheetName1)
                 .write(list, sheetName2, new ExportInfo())
                 .write(list, sheetName3, new ExportInfo())
                 .finish();

@@ -8,6 +8,7 @@ import com.alibaba.excel.support.ExcelTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
+import pan.springbootkit.utils.http.PanHttpUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -64,13 +65,13 @@ public class PanExcelUtil {
      * @param headLineNum 表头行数，默认为1
      * @return Excel 数据 list
      */
-    public static List<Object> readExcel(MultipartFile excel, BaseRowModel rowModel, int sheetNo,
-										 int headLineNum) {
+    public static List<Object> readExcel(MultipartFile excel, BaseRowModel rowModel, int sheetNo, int headLineNum) {
         ExcelListener excelListener = new ExcelListener();
         ExcelReader reader = getReader(excel, excelListener);
         if (reader == null) {
             return null;
         }
+
         reader.read(new Sheet(sheetNo, headLineNum, rowModel.getClass()));
 
         return excelListener.getDatas();
@@ -79,15 +80,11 @@ public class PanExcelUtil {
     /**
      * 导出 Excel ：一个 sheet，带表头
      *
-     * @param response  HttpServletResponse
      * @param list      数据 list，每个元素为一个 BaseRowModel
      * @param fileName  导出的文件名
      * @param sheetName 导入文件的 sheet 名
      */
-    public static void writeExcel(HttpServletResponse response,
-								  List<? extends BaseRowModel> list,
-								  String fileName,
-								  String sheetName) {
+    public static void writeExcel(List<? extends BaseRowModel> list, String fileName, String sheetName) {
     	/**
     	 * 参数合法性校验
     	 */
@@ -101,8 +98,7 @@ public class PanExcelUtil {
 			sheet.setSheetName(sheetName);
 		}
 
-
-        ExcelWriter writer = new ExcelWriter(getOutputStream(fileName, response), ExcelTypeEnum.XLSX);
+        ExcelWriter writer = new ExcelWriter(getOutputStream(fileName), ExcelTypeEnum.XLSX);
         writer.write(list, sheet);
         writer.finish();
 
@@ -115,13 +111,11 @@ public class PanExcelUtil {
     /**
      * 导出 Excel ：多个 sheet，带表头
      *
-     * @param response  HttpServletResponse
      * @param list      数据 list，每个元素为一个 BaseRowModel
      * @param fileName  导出的文件名
      * @param sheetName 导入文件的 sheet 名
      */
-    public static ExcelWriterFactroy writeExcelWithSheets(HttpServletResponse response,
-														  List<? extends BaseRowModel> list,
+    public static ExcelWriterFactroy writeExcelWithSheets(List<? extends BaseRowModel> list,
 														  String fileName,
 														  String sheetName) {
 		/**
@@ -137,7 +131,7 @@ public class PanExcelUtil {
 			sheet.setSheetName(sheetName);
 		}
 
-        ExcelWriterFactroy writer = new ExcelWriterFactroy(getOutputStream(fileName, response), ExcelTypeEnum.XLSX);
+        ExcelWriterFactroy writer = new ExcelWriterFactroy(getOutputStream(fileName), ExcelTypeEnum.XLSX);
         writer.write(list, sheet);
 
 		/**
@@ -149,19 +143,27 @@ public class PanExcelUtil {
     }
 
     /**
-     * 导出文件时为Writer生成OutputStream
+     * 导出文件时为 Writer 生成 OutputStream
+	 *
+	 * @param fileName
+     * @return java.io.OutputStream
+     * @date 2019-09-18 18:06
+     * @author panzhangbao
      */
-    private static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
+    private static OutputStream getOutputStream(String fileName) {
         // 创建本地文件
         String filePath = fileName + ".xlsx";
         File dbfFile = new File(filePath);
+
         try {
             if (!dbfFile.exists() || dbfFile.isDirectory()) {
                 dbfFile.createNewFile();
             }
             fileName = new String(filePath.getBytes(), "ISO-8859-1");
+			HttpServletResponse response = PanHttpUtil.getResponse();
             response.addHeader("Content-Disposition", "filename=" + fileName);
 			response.setCharacterEncoding("UTF-8");
+
             return response.getOutputStream();
         } catch (IOException e) {
             throw new ExcelException("创建文件失败！");
@@ -182,10 +184,11 @@ public class PanExcelUtil {
     		return null;
 		}
 
-        String filename = excel.getOriginalFilename();
-        if (filename == null || (!filename.toLowerCase().endsWith(".xls") && !filename.toLowerCase().endsWith(".xlsx"))) {
+        String fileName = excel.getOriginalFilename();
+        if (fileName == null || (!fileName.toLowerCase().endsWith(".xls") && !fileName.toLowerCase().endsWith(".xlsx"))) {
             throw new ExcelException("文件格式错误！");
         }
+
         try {
 			InputStream inputStream = new BufferedInputStream(excel.getInputStream());
 
