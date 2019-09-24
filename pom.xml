@@ -131,6 +131,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
+
+        <!-- MongoDB -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <version>2.0.1.RELEASE</version>
+        </dependency>
     </dependencies>
 
    <build>
@@ -140,11 +147,11 @@
            <plugin>
                <groupId>org.springframework.boot</groupId>
                <artifactId>spring-boot-maven-plugin</artifactId>
-               <!-- 打包路径 -->
                <configuration>
-                   <outputDirectory>
-                       /Users/panzhangbao/Documents/
-                   </outputDirectory>
+                   <!-- 如果没有改配置，devtools不会起作用 -->
+                   <fork>true</fork>
+                   <!-- 打包路径 -->
+                   <outputDirectory>/Users/panzhangbao/Documents/</outputDirectory>
                </configuration>
            </plugin>
 

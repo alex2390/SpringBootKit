@@ -28,7 +28,7 @@ import javax.servlet.MultipartConfigElement;
  * Created by panzhangbao on 2019-09-12 08:38:46
  * Copyright © 2018 panzhangbao. All rights reserved.
  */
-@ServletComponentScan
+//@ServletComponentScan
 @SpringBootApplication
 public class SpringBootKitApplication {
 

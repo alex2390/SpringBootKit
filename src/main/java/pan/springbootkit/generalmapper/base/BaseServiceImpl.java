@@ -78,7 +78,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseModel> imple
 		if (null == entity) {
 			return;
 		}
-		
+
 		entity.setUpdateTime(new Date());
 		entity.setIsDeleted(BaseModel.DELETED_FALSE);
 	}
@@ -132,7 +132,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseModel> imple
     	if (CollectionUtils.isEmpty(list)) {
     		return null;
 		}
-    	
+
     	List<T> resultList = new ArrayList<>();
     	list.forEach(e -> {
     		preInsert(e);

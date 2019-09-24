@@ -18,7 +18,7 @@ import java.util.List;
  * Copyright © 2018 panzhangbao. All rights reserved.
  */
 @RestController
-@RequestMapping("api/db/db_user/user")
+@RequestMapping("api/db/user")
 public class UserController {
 
 	@Resource

@@ -33,6 +33,7 @@ public class RedisController {
 		if (null == redisModel || StringUtils.isBlank(redisModel.getK()) || StringUtils.isBlank(redisModel.getV())) {
 			return false;
 		}
+
 		return redisService.setIfAbsent(redisModel.getK(), redisModel.getV(), TimeConstant.MINUTE);
 	}
 
