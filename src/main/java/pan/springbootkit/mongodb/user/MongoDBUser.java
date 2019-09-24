@@ -1,4 +1,4 @@
-package pan.springbootkit.mongodb.model;
+package pan.springbootkit.mongodb.user;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +10,7 @@ import pan.springbootkit.mongodb.base.MongoDBBaseModel;
 import java.io.Serializable;
 
 /**
- * MongoDB id entity
+ * MongoDB 用户 entity
  *
  * Created by panzhangbao on 2019-09-24 11:05:20
  * Copyright © 2019 panzhangbao. All rights reserved.
@@ -20,17 +20,17 @@ import java.io.Serializable;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class MongoDBID extends MongoDBBaseModel implements Serializable {
+public class MongoDBUser extends MongoDBBaseModel implements Serializable {
 
-	private static final long serialVersionUID = 2156444305167504739L;
-
-	/**
-	 * 集合名称
-	 */
-	private String collectionName;
+	private static final long serialVersionUID = -4751962510421112233L;
 
 	/**
-	 *  下一 id
+	 * 用户名
 	 */
-	private Integer nextId;
+	private String userName;
+
+	/**
+	 * 密码
+	 */
+	private String password;
 }

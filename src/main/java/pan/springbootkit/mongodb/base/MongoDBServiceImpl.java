@@ -13,8 +13,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import pan.springbootkit.mongodb.enums.MongoDBCollectionNameEnum;
-import pan.springbootkit.mongodb.model.MongoDBID;
 import pan.springbootkit.utils.PanDateUtil;
 
 import javax.annotation.Resource;

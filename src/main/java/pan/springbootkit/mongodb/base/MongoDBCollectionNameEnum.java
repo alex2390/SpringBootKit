@@ -1,4 +1,4 @@
-package pan.springbootkit.mongodb.enums;
+package pan.springbootkit.mongodb.base;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,19 +12,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum MongoDBCollectionNameEnum {
-	ID("id", null, "id"),
-	USER("user", 1, "用户"),
+	ID("id", "id"),
+	USER("user", "用户"),
 	;
 
 	/**
 	 * 集合名称
 	 */
 	private String collectionName;
-
-	/**
-	 * 集合名称对应的 tb_id 里面的主键 id
-	 */
-	private Integer id;
 
 	/**
 	 * 说明

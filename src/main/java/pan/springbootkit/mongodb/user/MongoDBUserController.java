@@ -1,12 +1,12 @@
-package pan.springbootkit.mongodb;
+package pan.springbootkit.mongodb.user;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import pan.springbootkit.base.BaseResult;
 import pan.springbootkit.mongodb.base.MongoDBService;
-import pan.springbootkit.mongodb.enums.MongoDBCollectionNameEnum;
-import pan.springbootkit.mongodb.model.MongoDBID;
-import pan.springbootkit.mongodb.model.MongoDBUser;
+import pan.springbootkit.mongodb.base.MongoDBCollectionNameEnum;
+import pan.springbootkit.mongodb.base.MongoDBID;
+import pan.springbootkit.mongodb.user.MongoDBUser;
 
 import javax.annotation.Resource;
 import java.util.HashMap;

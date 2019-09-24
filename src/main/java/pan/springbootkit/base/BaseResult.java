@@ -2,6 +2,7 @@ package pan.springbootkit.base;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import pan.springbootkit.generalmapper.base.BaseResultEnum;
 import pan.springbootkit.utils.PanStringUtil;
@@ -105,11 +106,6 @@ public class BaseResult<T> implements Serializable {
 		return result;
 	}
 
-	@Override
-	public String toString() {
-		return "BaseResult(code=" + this.getCode() + ", message=" + this.getMessage() + ", data=" + this.getData() + ")";
-	}
-
 	/**
 	 * 成功 0
 	 *
@@ -153,6 +149,7 @@ public class BaseResult<T> implements Serializable {
 	public static BaseResult success(Object data) {
 		BaseResult baseResult = new BaseResult();
 		baseResult.setCode(BaseResultEnum.SUCCESS.getValue());
+		baseResult.setMessage(BaseResultEnum.SUCCESS.getMark());
 		baseResult.setData(data);
 
 		return baseResult;
