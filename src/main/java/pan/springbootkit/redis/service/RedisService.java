@@ -75,4 +75,14 @@ public interface RedisService {
 	 * @author panzhangbao
 	 */
 	String get(String k);
+
+	/**
+	 * 获取过期时间
+	 *
+	 * @param k
+	 * @return java.lang.Long
+	 * @date 2019-09-27 09:43
+	 * @author panzhangbao
+	 */
+	Long getExpiredTime(String k);
 }

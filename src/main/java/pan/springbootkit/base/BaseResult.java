@@ -2,7 +2,6 @@ package pan.springbootkit.base;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import pan.springbootkit.generalmapper.base.BaseResultEnum;
 import pan.springbootkit.utils.PanStringUtil;

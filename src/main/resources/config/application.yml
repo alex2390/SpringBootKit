@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: mybatis
+    active: develop
   devtools:
     remote:
       restart:

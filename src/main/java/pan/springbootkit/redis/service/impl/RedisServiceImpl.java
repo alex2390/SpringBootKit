@@ -80,6 +80,7 @@ public class RedisServiceImpl implements RedisService {
 		String oldV = ops.get(k);
 		if (StringUtils.isBlank(oldV)) {
 			ops.set(k, v, ttl, TimeUnit.SECONDS);
+
 			return true;
 		}
 
@@ -99,10 +100,7 @@ public class RedisServiceImpl implements RedisService {
 	@Override
 	public void set(String k, String v, Long ttl) {
 		ValueOperations<String, String> ops = redisTemplate.opsForValue();
-		String oldV = ops.get(k);
-		if (StringUtils.isBlank(oldV)) {
-			ops.set(k, v, ttl, TimeUnit.SECONDS);
-		}
+		ops.set(k, v, ttl, TimeUnit.SECONDS);
 	}
 
 	/**
@@ -119,5 +117,23 @@ public class RedisServiceImpl implements RedisService {
 		ValueOperations<String, String> ops = redisTemplate.opsForValue();
 
 		return ops.get(k);
+	}
+
+	/**
+	 * 获取过期时间
+	 *
+	 * @param k
+	 * @return java.lang.Long
+	 * @date 2019-09-27 09:43
+	 * @author panzhangbao
+	 */
+	@Override
+	public Long getExpiredTime(String k) {
+		Long ttl = redisTemplate.getExpire(k, TimeUnit.SECONDS);
+		if (null == ttl || ttl <= 0) {
+			return 0L;
+		}
+
+		return ttl;
 	}
 }
