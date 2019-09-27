@@ -85,4 +85,15 @@ public interface RedisService {
 	 * @author panzhangbao
 	 */
 	Long getExpiredTime(String k);
+
+	/**
+	 * delete
+	 * 		支持模糊删除，加 * 即可
+	 *
+	 * @param k
+	 * @return void
+	 * @date 2019-09-27 09:57
+	 * @author panzhangbao
+	 */
+	void delete(String k);
 }

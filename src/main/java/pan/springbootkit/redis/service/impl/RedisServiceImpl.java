@@ -4,9 +4,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import pan.springbootkit.redis.service.RedisService;
 
 import javax.annotation.Resource;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -135,5 +137,24 @@ public class RedisServiceImpl implements RedisService {
 		}
 
 		return ttl;
+	}
+
+	/**
+	 * delete
+	 * 		支持模糊删除，加 * 即可
+	 *
+	 * @param k
+	 * @return void
+	 * @date 2019-09-27 09:57
+	 * @author panzhangbao
+	 */
+	@Override
+	public void delete(String k) {
+		Set<String> keys = redisTemplate.keys(k);
+		if (CollectionUtils.isEmpty(keys)) {
+			return;
+		}
+
+		redisTemplate.delete(keys);
 	}
 }
