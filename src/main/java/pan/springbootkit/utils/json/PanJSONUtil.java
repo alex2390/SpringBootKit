@@ -23,6 +23,28 @@ import java.util.Map;
 public class PanJSONUtil {
 
 	/**
+	 * 美化 json
+	 *
+	 * @param json
+	 * @return java.lang.String
+	 * @date 2019-10-02 17:42
+	 * @author panzhangbao
+	 */
+	public static String prettyJson(String json){
+		if(StringUtils.isBlank(json)){
+			return json;
+		}
+		JSONObject jsonObject;
+		try {
+			jsonObject = JSONObject.parseObject(json);
+		}catch (Exception e){
+			return json;
+		}
+
+		return JSONObject.toJSONString(jsonObject,true);
+	}
+
+	/**
 	 * json 转 Map
 	 * 		多层嵌套时，null 属性会过滤掉，需要手动处理
 	 *

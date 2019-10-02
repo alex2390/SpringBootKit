@@ -1,7 +1,9 @@
 spring:
   profiles:
-    active: develop
+    active: redis
   devtools:
     remote:
       restart:
         exclude: config/**,static/**,templates/**
+logging:
+  config: classpath:config/logback.xml

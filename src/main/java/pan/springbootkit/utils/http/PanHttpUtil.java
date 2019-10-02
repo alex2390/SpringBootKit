@@ -28,6 +28,7 @@ public class PanHttpUtil {
 	 * 连接超时时间 15 秒
 	 */
 	private static final Integer CONNECT_TIMEOUT = 15000;
+
 	/**
 	 * 读取超时时间 60 秒
 	 */
@@ -48,6 +49,9 @@ public class PanHttpUtil {
 	 */
 	private static final String  CONTENT_TYPE_APPLICATION_JSON = "application/json";
 
+	/**
+	 * 内容类型 form 表单
+	 */
 	private static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
 
 	/**
@@ -83,13 +87,14 @@ public class PanHttpUtil {
 	/**
 	 * 获取 Header 信息
 	 *
-	 * @param request
 	 * @return java.util.Map<java.lang.String,java.lang.String>
 	 * @date 2019-09-12 11:05
 	 * @author panzhangbao
 	 */
-	public static Map<String, String> getHeadersInfo(HttpServletRequest request) {
-		Map<String, String> map = new HashMap<String, String>();
+	public static Map<String, String> getHeadersInfo() {
+		HttpServletRequest request = getRequest();
+
+		Map<String, String> map = new HashMap<>();
 		Enumeration headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
 			String key = (String) headerNames.nextElement();
@@ -103,13 +108,14 @@ public class PanHttpUtil {
 	/**
 	 * 获取所有请求参数
 	 *
-	 * @param request
 	 * @return java.util.Map<java.lang.String,java.lang.String>
 	 * @date 2019-09-12 11:12
 	 * @author panzhangbao
 	 */
-	public static Map<String, String> getAllRequestParam(HttpServletRequest request) {
-		 Map<String, String> res = new HashMap<String, String>();
+	public static Map<String, String> getAllRequestParam() {
+		HttpServletRequest request = getRequest();
+
+		Map<String, String> res = new HashMap<String, String>();
     	Enumeration<?> temp = request.getParameterNames();
     	if (null == temp) {
     		return null;
@@ -130,12 +136,13 @@ public class PanHttpUtil {
 	/**
 	 * 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址
 	 *
-	 * @param request
 	 * @return java.lang.String
 	 * @date 2019-09-12 10:51
 	 * @author panzhangbao
 	 */
-	public final static String getIpAddress(HttpServletRequest request) {
+	public final static String getIpAddress() {
+		HttpServletRequest request = getRequest();
+
 		String ip = request.getHeader("X-Forwarded-For");
 		String unknown = "unknown";
 
@@ -164,6 +171,10 @@ public class PanHttpUtil {
 					break;
 				}
 			}
+		}
+
+		if ("0:0:0:0:0:0:0:1".equals(ip)) {
+			return "localhost";
 		}
 
 		return ip;

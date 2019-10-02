@@ -15,7 +15,7 @@
 // */
 //@RestController
 //@RequestMapping("api/global/config")
-//public class GlobalConfigController {
+//public class TestGlobalConfigController {
 //	@Resource
 //	GlobalConfig globalConfig;
 //

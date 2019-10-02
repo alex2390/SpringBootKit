@@ -205,7 +205,40 @@ public class BaseResult<T> implements Serializable {
 	}
 
 	/**
-	 * 参数必填 2
+	 * token 过期 2
+	 *
+	 * @param
+	 * @return pan.springbootkit.base.BaseResult
+	 * @date 2019-10-02 11:18
+	 * @author panzhangbao
+	 */
+	public static BaseResult tokenExpired() {
+		BaseResult baseResult = new BaseResult();
+		baseResult.setCode(BaseResultEnum.TOKEN_EXPIRED.getValue());
+		baseResult.setMessage(BaseResultEnum.TOKEN_EXPIRED.getMark());
+
+		return baseResult;
+	}
+
+	/**
+	 * 没有权限 3
+	 *
+	 * @param
+	 * @return pan.springbootkit.base.BaseResult
+	 * @date 2019-10-02 11:19
+	 * @author panzhangbao
+	 */
+	public static BaseResult haveNoAuth() {
+		BaseResult baseResult = new BaseResult();
+		baseResult.setCode(BaseResultEnum.HAVE_NO_AUTH.getValue());
+		baseResult.setMessage(BaseResultEnum.HAVE_NO_AUTH.getMark());
+
+		return baseResult;
+	}
+
+
+	/**
+	 * 参数不合法 4
 	 *
 	 * @param
 	 * @return tc.smartlockapplet.base.BaseResult
@@ -214,14 +247,14 @@ public class BaseResult<T> implements Serializable {
 	 */
 	public static BaseResult neededParam() {
 		BaseResult baseResult = new BaseResult();
-		baseResult.setCode(BaseResultEnum.NEEDED_PARAMETER.getValue());
-		baseResult.setMessage(BaseResultEnum.NEEDED_PARAMETER.getMark());
+		baseResult.setCode(BaseResultEnum.ILLEGAL_PARAMETER.getValue());
+		baseResult.setMessage(BaseResultEnum.ILLEGAL_PARAMETER.getMark());
 
 		return baseResult;
 	}
 
 	/**
-	 * 参数必填 2
+	 * 参数不合法 4
 	 *
 	 * @param
 	 * @return tc.smartlockapplet.base.BaseResult
@@ -230,14 +263,13 @@ public class BaseResult<T> implements Serializable {
 	 */
 	public static BaseResult neededParam(String param) {
 		BaseResult baseResult = new BaseResult();
-		baseResult.setCode(BaseResultEnum.NEEDED_PARAMETER.getValue());
-		baseResult.setMessage(param + " " + BaseResultEnum.NEEDED_PARAMETER.getMark());
+
 
 		return baseResult;
 	}
 
 	/**
-	 * 参数必填校验 2
+	 * 参数合法校验 4
 	 *
 	 * @param o	实体类对象
 	 * @param paramKeys	前端必填参数 keys
@@ -275,39 +307,6 @@ public class BaseResult<T> implements Serializable {
 	}
 
 	/**
-	 * 参数不合法 3
-	 *
-	 * @param
-	 * @return pan.springbootkit.generalmapper.base.BaseResult
-	 * @date 2018/12/25 23:33
-	 * @author panzhangbao
-	 */
-	public static BaseResult illegalParam() {
-		BaseResult baseResult = new BaseResult();
-		baseResult.setCode(BaseResultEnum.ILLEGAL_PARAMETER.getValue());
-		baseResult.setMessage(BaseResultEnum.ILLEGAL_PARAMETER.getMark());
-
-		return baseResult;
-	}
-
-	/**
-	 * 参数不合法 3
-	 *
-	 * @param param 参数
-	 * @return pan.springbootkit.generalmapper.base.BaseResult
-	 * @date 2018/12/25 23:33
-	 * @author panzhangbao
-	 */
-	public static BaseResult illegalParam(String param) {
-		BaseResult baseResult = new BaseResult();
-		baseResult.setCode(BaseResultEnum.ILLEGAL_PARAMETER.getValue());
-		baseResult.setMessage(param + " " + BaseResultEnum.ILLEGAL_PARAMETER.getMark());
-
-		return baseResult;
-	}
-
-
-	/**
 	 * 系统错误 -1
 	 *
 	 * @param e 异常
@@ -315,11 +314,13 @@ public class BaseResult<T> implements Serializable {
 	 * @date 2018/12/25 16:19
 	 * @author panzhangbao
 	 */
-	public static BaseResult systemError(Exception e) {
+	public static BaseResult systemError(String e) {
 		BaseResult baseResult = new BaseResult();
 		baseResult.setCode(BaseResultEnum.SYSTEM_ERROR.getValue());
 		baseResult.setMessage(BaseResultEnum.SYSTEM_ERROR.getMark());
-		baseResult.setData("接口访问异常: " + e.toString());
+		if (StringUtils.isNotBlank(e)) {
+			baseResult.setData(e);
+		}
 
 		return baseResult;
 	}

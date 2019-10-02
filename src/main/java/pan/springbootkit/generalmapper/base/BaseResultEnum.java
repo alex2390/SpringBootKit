@@ -15,8 +15,9 @@ public enum BaseResultEnum {
 	SYSTEM_ERROR(-1, "系统错误"),
 	SUCCESS(0, "成功"),
 	FAILURE(1, "失败"),
-	NEEDED_PARAMETER(2, "参数必填"),
-	ILLEGAL_PARAMETER(3, "参数不合法"),
+	TOKEN_EXPIRED(2, "token 过期，请重新登录"),
+	HAVE_NO_AUTH(3, "没有权限"),
+	ILLEGAL_PARAMETER(4, "参数不合法"),
 	;
 
 	private Integer value;
