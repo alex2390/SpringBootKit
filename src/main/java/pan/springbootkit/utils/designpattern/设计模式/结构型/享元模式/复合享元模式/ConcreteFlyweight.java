@@ -26,8 +26,7 @@ public class ConcreteFlyweight implements Flyweight {
      */
     @Override
     public void operation(String state) {
-        // TODO Auto-generated method stub
-        System.out.println("Intrinsic State = " + this.intrinsicState);
+		System.out.println("Intrinsic State = " + this.intrinsicState);
         System.out.println("Extrinsic State = " + state);
     }
 }

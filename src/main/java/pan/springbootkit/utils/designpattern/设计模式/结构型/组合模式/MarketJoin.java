@@ -13,19 +13,14 @@ public class MarketJoin extends Market {
 
     @Override
     public void add(Market m) {
-        // TODO Auto-generated method stub
-
-    }
+	}
 
     @Override
     public void remove(Market m) {
-        // TODO Auto-generated method stub
-
-    }
+	}
 
     @Override
     public void payByCard() {
-        // TODO Auto-generated method stub
-        System.out.println(name + "消费,积分已累加入该会员卡");
+System.out.println(name + "消费,积分已累加入该会员卡");
     }
-}
+	}

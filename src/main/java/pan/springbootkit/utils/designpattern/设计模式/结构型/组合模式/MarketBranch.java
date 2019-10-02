@@ -19,21 +19,18 @@ public class MarketBranch extends Market {
 
     @Override
     public void add(Market m) {
-        // TODO Auto-generated method stub
-        list.add(m);
+		list.add(m);
     }
 
     @Override
     public void remove(Market m) {
-        // TODO Auto-generated method stub
-        list.remove(m);
+		list.remove(m);
     }
 
     // 消费之后，该分店下的加盟店自动累加积分
     @Override
     public void payByCard() {
-        // TODO Auto-generated method stub
-        System.out.println(name + "消费,积分已累加入该会员卡");
+		System.out.println(name + "消费,积分已累加入该会员卡");
         for (Market m : list) {
             m.payByCard();
         }
