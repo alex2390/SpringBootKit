@@ -1,13 +1,13 @@
 package pan.springbootkit.generalmapper.service;
 
 import pan.springbootkit.generalmapper.base.BaseService;
-import pan.springbootkit.generalmapper.model.User;
+import pan.springbootkit.generalmapper.model.Area;
 
 /**
- * 用户 service
+ * 区域 service
  *
- * Created by panzhangbao on 2018-12-24 12:05:46
+ * Created by panzhangbao on 2019-10-04 00:08:40
  * Copyright © 2018 panzhangbao. All rights reserved.
  */
-public interface UserService extends BaseService<User> {
+public interface AreaService extends BaseService<Area> {
 }

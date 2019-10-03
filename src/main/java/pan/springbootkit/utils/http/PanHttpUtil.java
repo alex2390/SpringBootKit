@@ -578,7 +578,7 @@ public class PanHttpUtil {
 			}
 
 			// 对输入流对象进行包装:charset根据工作项目组的要求来设置
-			br = new BufferedReader(new InputStreamReader(is, UTF_8));
+			br = new BufferedReader(new InputStreamReader(is, "GBK"));
 			StringBuffer sbf = new StringBuffer();
 			String temp;
 			// 循环遍历一行一行读取数据
@@ -586,6 +586,7 @@ public class PanHttpUtil {
 				sbf.append(temp);
 				sbf.append("\r\n");
 			}
+
 			result.setCode(connection.getResponseCode());
 			result.setData(sbf.toString());
 		} catch (MalformedURLException e) {

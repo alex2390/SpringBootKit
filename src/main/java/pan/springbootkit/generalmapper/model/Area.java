@@ -12,9 +12,9 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * 用户 实体类
+ * 区域 实体类
  *
- * Created by panzhangbao on 2018-12-24 12:08:59
+ * Created by panzhangbao on 2019-10-04 00:08:40
  * Copyright © 2018 panzhangbao. All rights reserved.
  */
 @Data
@@ -22,24 +22,24 @@ import java.io.Serializable;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@Table(name = "tb_user")
-public class User extends BaseModel implements Serializable {
+@Table(name = "area")
+public class Area extends BaseModel implements Serializable {
 
-	private static final long serialVersionUID = -7377646896252514022L;
+	private static final long serialVersionUID = -5550777596951862851L;
 
 	/**
-     * 姓名
+     * 名称
      */
     private String name;
 
     /**
-     * 性别（0:未知;1:男:2:女）
+     * 级别（默认为1。1：省；2：市；3：县：4：镇；5：村）
      */
-    private Integer gender;
+    private Integer level;
 
     /**
-     * 手机号
+     * 父级 id（默认为 0）
      */
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Column(name = "parent_id")
+    private Integer parentId;
 }

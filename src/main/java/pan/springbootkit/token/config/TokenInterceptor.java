@@ -51,20 +51,20 @@ public class TokenInterceptor implements HandlerInterceptor {
 		 */
 
 		/**
-		 * 存储日志
+		 * 打印请求数据
 		 */
-		saveRequestData(request);
+		printRequestData(request);
 
 		// 只有返回 true 才会继续向下执行，返回false取消当前请求
 		return true;
 	}
 
 	@Override
-	public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView){
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView mv){
 	}
 
 	@Override
-	public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e){
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object o, Exception e){
 	}
 
 	/**
@@ -92,14 +92,14 @@ public class TokenInterceptor implements HandlerInterceptor {
 	}
 
 	/**
-	 * 记录下请求内容
+	 * 打印请求数据
 	 *
 	 * @param request
 	 * @return void
 	 * @date 2019-10-02 17:32
 	 * @author panzhangbao
 	 */
-	private void saveRequestData(HttpServletRequest request) {
+	private void printRequestData(HttpServletRequest request) {
 		Map requestMap = new HashMap(6);
 		requestMap.put("url", request.getRequestURL().toString());
 		requestMap.put("uri", request.getRequestURI());
