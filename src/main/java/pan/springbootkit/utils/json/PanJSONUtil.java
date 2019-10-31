@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * JSON util
@@ -61,7 +58,8 @@ public class PanJSONUtil {
 			return null;
 		}
 
-		Map resultMap = JSONObject.parseObject(jsonStr, LinkedHashMap.class, Feature.OrderedField);
+		Map resultMap = JSONObject.parseObject(jsonStr, LinkedHashMap.class, Feature.OrderedField,
+				Feature.InitStringFieldAsEmpty);
 
 		return resultMap;
 	}
@@ -83,7 +81,7 @@ public class PanJSONUtil {
 			return null;
 		}
 
-		return JSONObject.parseObject(jsonStr, cls, Feature.OrderedField);
+		return JSONObject.parseObject(jsonStr, cls, Feature.OrderedField, Feature.InitStringFieldAsEmpty);
 	}
 
 	/**
@@ -112,61 +110,66 @@ public class PanJSONUtil {
 	/**
 	 * Map 装 json
 	 *
-	 * @param map
+	 * @param o
 	 * @return java.lang.String
 	 * @date 2019-09-02 09:13
 	 * @author panzhangbao
 	 */
-	public static String mapToJson(Map map) {
+	public static String mapToJson(Object o) {
 		/**
 		 * 参数合法性校验
 		 */
-		if (CollectionUtils.isEmpty(map)) {
+		if (null == o) {
 			return null;
 		}
 
-		return JSONObject.toJSONString(map,
+		return JSONObject.toJSONString(o,
 				SerializerFeature.WriteMapNullValue,
+				SerializerFeature.WriteNullStringAsEmpty,
+				SerializerFeature.SkipTransientField,
+				SerializerFeature.NotWriteDefaultValue,
 				SerializerFeature.WriteDateUseDateFormat);
 	}
 
 	/**
 	 * Map 转实体类	调用了 mapToJson
 	 *
-	 * @param map
+	 * @param o
 	 * @param cls
 	 * @return T
 	 * @date 2019-09-02 09:15
 	 * @author panzhangbao
 	 */
-	public static <T> T mapToEntity(Map map, Class<T> cls) {
+	public static <T> T mapToEntity(Object o, Class<T> cls) {
 		/**
 		 * 参数合法性校验
 		 */
-		if (CollectionUtils.isEmpty(map)) {
+		if (null == o) {
 			return null;
 		}
 
-		return JSONObject.parseObject(mapToJson(map), cls);
+		return JSONObject.parseObject(mapToJson(o), cls);
 	}
 
 	/**
 	 * 实体类转 json
-	 * 		转换的时间为时间戳
 	 *
-	 * @param object
+	 * @param o
 	 * @return
 	 */
-	public static String entityToJson(Object object) {
+	public static String entityToJson(Object o) {
 		/**
 		 * 参数合法性校验
 		 */
-		if (null == object) {
+		if (null == o) {
 			return null;
 		}
 
-		return JSONObject.toJSONString(object,
+		return JSONObject.toJSONString(o,
 				SerializerFeature.WriteMapNullValue,
+				SerializerFeature.WriteNullStringAsEmpty,
+				SerializerFeature.SkipTransientField,
+				SerializerFeature.NotWriteDefaultValue,
 				SerializerFeature.WriteDateUseDateFormat);
 	}
 
@@ -174,22 +177,20 @@ public class PanJSONUtil {
 	 * 实体类转 Map	调用了 jsonToMap 和 entityToJson
 	 * 		多层嵌套 null 属性会过滤掉，需要手动处理
 	 *
-	 * @param object
+	 * @param o
 	 * @return java.util.Map
 	 * @date 2019-09-02 11:17
 	 * @author panzhangbao
 	 */
-	public static Map entityToMap(Object object){
+	public static Map entityToMap(Object o){
 		/**
 		 * 参数合法性校验
 		 */
-		if (null == object) {
+		if (null == o) {
 			return null;
 		}
 
-		String jsonStr = entityToJson(object);
-
-		return jsonToMap(jsonStr);
+		return jsonToMap(entityToJson(o));
 	}
 
 	/**
@@ -219,48 +220,48 @@ public class PanJSONUtil {
 	/**
 	 * main Method
 	 */
-//	public static void main(String[] args) {
-//		TestModel testModel = new TestModel();
-//		testModel.setCreatedTime(new Date());
-//		testModel.setName("牛牛");
-//		TestModel innerTestModel = new TestModel();
-//		innerTestModel.setName("内部 model 名");
-//		innerTestModel.setId(1);
-//		testModel.setInnerModel(innerTestModel);
-//		Map innerMap = new HashMap();
-//		innerMap.put("money", 1111);
-//		innerMap.put("size", null);
-//		innerMap.put("date", new Date());
-//		innerMap.put("name", "testInnerMap");
-//		testModel.setInnerMap(innerMap);
-//		List innerList = new ArrayList();
-//		innerMap = new HashMap();
-//		innerMap.put("money", 1);
-//		innerMap.put("size", null);
-//		innerMap.put("date", new Date());
-//		innerMap.put("name", "testInnerMap2");
-//		innerList.add(innerMap);
-//		testModel.setInnerList(innerList);
+	public static void main(String[] args) {
+		TestModel testModel = new TestModel();
+		testModel.setCreatedTime(new Date());
+		testModel.setName("牛牛");
+		TestModel innerTestModel = new TestModel();
+		innerTestModel.setName("内部 model 名");
+		innerTestModel.setId(1);
+		testModel.setInnerModel(innerTestModel);
+		Map innerMap = new HashMap();
+		innerMap.put("money", 1111);
+		innerMap.put("size", null);
+		innerMap.put("date", new Date());
+		innerMap.put("name", "testInnerMap");
+		testModel.setInnerMap(innerMap);
+		List innerList = new ArrayList();
+		innerMap = new HashMap();
+		innerMap.put("money", 1);
+		innerMap.put("size", null);
+		innerMap.put("date", new Date());
+		innerMap.put("name", "testInnerMap2");
+		innerList.add(innerMap);
+		testModel.setInnerList(innerList);
+
+
+		log.info("\n原始数据：\n" + testModel.toString());
+
+		String jsonStr = entityToJson(testModel);
+////		log.info("\n实体类转 JSON：\n" + jsonStr);
+////		Map map = entityToMap(testModel);
+////		log.info("\n实体类转 Map：\n" + map);
 ////
+		log.info("JSON 转 Map：\n" + jsonToMap(jsonStr));
+////		log.info("JSON 转 Entity：\n" + jsonToEntity(jsonStr, TestModel.class));
 ////
-////
-//////		log.info("\n原始数据：\n" + testModel.toString());
-//////
-////		String jsonStr = entityToJson(testModel);
-//////		log.info("\n实体类转 JSON：\n" + jsonStr);
-//////		Map map = entityToMap(testModel);
-//////		log.info("\n实体类转 Map：\n" + map);
-//////
-//////		log.info("JSON 转 Map：\n" + jsonToMap(jsonStr));
-//////		log.info("JSON 转 Entity：\n" + jsonToEntity(jsonStr, TestModel.class));
-//////
-//////		log.info("\nMap 转 JSON：\n" + mapToJson(map));
-//////		log.info(mapToEntity(map, TestModel.class));
-////
-//		List<TestModel> testModelList = new ArrayList<>();
-//		testModelList.add(testModel);
-//		String jsonListStr = listToJson(testModelList);
-//////		log.info(jsonListStr);
-//		log.info(jsonToList(jsonListStr, TestModel.class).toString());
-//	}
+////		log.info("\nMap 转 JSON：\n" + mapToJson(map));
+////		log.info(mapToEntity(map, TestModel.class));
+//
+		List<TestModel> testModelList = new ArrayList<>();
+		testModelList.add(testModel);
+		String jsonListStr = listToJson(testModelList);
+////		log.info(jsonListStr);
+		log.info(jsonToList(jsonListStr, TestModel.class).toString());
+
+	}
 }
